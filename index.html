@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multilingual AAC Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .category { margin-bottom: 24px; }
+    .item { margin: 6px 0; }
+    button { margin-left: 4px; }
+    .label { min-width: 120px; display: inline-block; }
+  </style>
+</head>
+<body>
+  <h1>English–Hindi–Tamil AAC Demo</h1>
+
+  <div id="app"></div>
+
+  <script>
+    // ---- DATA (from previous JSON) ----
+    const data = {
+      greetings: [
+        { code: "gm", en: "good morning", hi: "सुप्रभात", ta: "காலை வணக்கம்" },
+        { code: "ga", en: "good afternoon", hi: "शुभ दोपहर", ta: "மதிய வணக்கம்" },
+        { code: "ge", en: "good evening", hi: "शुभ संध्या", ta: "மாலை வணக்கம்" },
+        { code: "gn", en: "good night", hi: "शुभ रात्रि", ta: "இரவு வணக்கம்" },
+        { code: "hi", en: "hello", hi: "नमस्ते", ta: "வணக்கம்" }
+      ],
+      family: [
+        { en: "father", hi: "पिता", ta: "அப்பா" },
+        { en: "mother", hi: "माँ", ta: "அம்மா" },
+        { en: "brother", hi: "भाई", ta: "அண்ணன்" },
+        { en: "sister", hi: "बहन", ta: "சகோதரி" },
+        { en: "son", hi: "बेटा", ta: "மகன்" },
+        { en: "daughter", hi: "बेटी", ta: "மகள்" },
+        { en: "grandfather", hi: "दादा", ta: "தாத்தா" },
+        { en: "grandmother", hi: "दादी", ta: "பாட்டி" },
+        { en: "husband", hi: "पति", ta: "கணவர்" },
+        { en: "wife", hi: "पत्नी", ta: "மனைவி" }
+      ],
+      food: [
+        { en: "milk", hi: "दूध", ta: "பால்" },
+        { en: "water", hi: "पानी", ta: "தண்ணீர்" },
+        { en: "rice", hi: "चावल", ta: "அரிசி" },
+        { en: "bread", hi: "रोटी", ta: "ரொட்டி" },
+        { en: "vegetable", hi: "सब्ज़ी", ta: "காய்கறி" },
+        { en: "fruit", hi: "फल", ta: "பழம்" },
+        { en: "banana", hi: "केला", ta: "வாழைப்பழம்" },
+        { en: "apple", hi: "सेब", ta: "ஆப்பிள்" },
+        { en: "egg", hi: "अंडा", ta: "முட்டை" },
+        { en: "tea", hi: "चाय", ta: "தேநீர்" }
+      ],
+      transport: [
+        { en: "road", hi: "सड़क", ta: "சாலை" },
+        { en: "car", hi: "कार", ta: "கார்" },
+        { en: "bus", hi: "बस", ta: "பஸ்" },
+        { en: "train", hi: "ट्रेन", ta: "ரயில்" },
+        { en: "bike", hi: "साइकिल", ta: "மிதிவண்டி" },
+        { en: "auto rickshaw", hi: "ऑटो", ta: "ஆட்டோ" },
+        { en: "truck", hi: "ट्रक", ta: "லாரி" },
+        { en: "ship", hi: "जहाज़", ta: "கப்பல்" },
+        { en: "airplane", hi: "हवाई जहाज़", ta: "விமானம்" },
+        { en: "station", hi: "स्टेशन", ta: "நிலையம்" }
+      ],
+      emotions: [
+        { en: "happy", hi: "खुश", ta: "மகிழ்ச்சி" },
+        { en: "sad", hi: "दुखी", ta: "வருத்தம்" },
+        { en: "angry", hi: "गुस्सा", ta: "கோபம்" },
+        { en: "hurt", hi: "दर्द", ta: "வலி" },
+        { en: "scared", hi: "डर लगा", ta: "பயம்" },
+        { en: "tired", hi: "थका हुआ", ta: "சோர்வு" },
+        { en: "surprised", hi: "आश्चर्यचकित", ta: "ஆச்சரியம்" },
+        { en: "worried", hi: "चिंतित", ta: "கவலை" }
+      ],
+      festivals: [
+    { "en": "Diwali",      "hi": "दिवाली",            "ta": "தீபாவளி" },
+    { "en": "Pongal",      "hi": "पोंगल",             "ta": "பொங்கல்" },
+    { "en": "Holi",        "hi": "होली",              "ta": "ஹோலி" },
+    { "en": "Eid",         "hi": "ईद",               "ta": "ஈத்" },
+    { "en": "Christmas",   "hi": "क्रिसमस",          "ta": "கிறிஸ்துமஸ்" },
+    { "en": "New Year",    "hi": "नया साल",          "ta": "புத்தாண்டு" },
+    { "en": "Navratri",    "hi": "नवरात्रि",         "ta": "நவராத்திரி" },
+    { "en": "Ganesh Chaturthi", "hi": "गणेश चतुर्थी", "ta": "விநாயகர் சதுர்த்தி" },
+    { "en": "Onam",        "hi": "ओणम",              "ta": "ஓணம்" },
+    { "en": "Raksha Bandhan", "hi": "रक्षा बंधन",    "ta": "ரக்ஷா பந்தன்" }
+  ]
+    };
+
+    const synth = window.speechSynthesis;
+
+    function speak(text, langCode) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = langCode;         // "en-IN", "hi-IN", "ta-IN"
+      synth.cancel();
+      synth.speak(u);
+    }
+
+    function buildUI() {
+      const app = document.getElementById("app");
+
+      Object.entries(data).forEach(([categoryName, items]) => {
+        const catDiv = document.createElement("div");
+        catDiv.className = "category";
+
+        const h2 = document.createElement("h2");
+        h2.textContent = categoryName;
+        catDiv.appendChild(h2);
+
+        items.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "item";
+
+          const label = document.createElement("span");
+          label.className = "label";
+          label.textContent = item.en;
+          row.appendChild(label);
+
+          // English button
+          const btnEn = document.createElement("button");
+          btnEn.textContent = item.en;
+          btnEn.onclick = () => speak(item.en, "en-IN"); // or en-US
+          row.appendChild(btnEn);
+
+          // Hindi button
+          const btnHi = document.createElement("button");
+          btnHi.textContent = item.hi;
+          btnHi.onclick = () => speak(item.hi, "hi-IN");
+          row.appendChild(btnHi);
+
+          // Tamil button
+          const btnTa = document.createElement("button");
+          btnTa.textContent = item.ta;
+          btnTa.onclick = () => speak(item.ta, "ta-IN");
+          row.appendChild(btnTa);
+
+          catDiv.appendChild(row);
+        });
+
+        app.appendChild(catDiv);
+      });
+    }
+
+    // Wait for voices to be ready (Chrome quirk). [web:102][web:58]
+    if (synth.getVoices().length === 0) {
+      synth.addEventListener("voiceschanged", buildUI, { once: true });
+    } else {
+      buildUI();
+    }
+  </script>
+</body>
+</html>
