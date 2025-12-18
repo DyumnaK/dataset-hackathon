@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Indian Food Drag & Drop</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .container { display: flex; gap: 40px; }
+    .images, .labels { width: 50%; }
+    .img-item { margin: 8px 0; }
+    img { width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc; }
+    .drop-zone {
+      border: 2px dashed #aaa;
+      padding: 8px;
+      margin: 8px 0;
+      min-height: 40px;
+    }
+    .correct { border-color: green; background: #e6ffe6; }
+    .wrong   { border-color: red;   background: #ffe6e6; }
+  </style>
+</head>
+<body>
+  <h1>Match the Indian foods to their names</h1>
+  <p>Drag each food picture to the correct label. Then click “Check score”.</p>
+  <button onclick="checkScore()">Check score</button>
+  <p id="score"></p>
+
+  <div class="container">
+    <!-- LEFT: images (you replace src paths with real images) -->
+    <div class="images">
+      <div class="img-item"><img src="dosa.webp"      id="img-dosa"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="idli.webp"      id="img-idli"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="poha.webp"      id="img-poha"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="puri.webp"      id="img-puri"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="chapati.webp"   id="img-chapati"   draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="sambar.webp"    id="img-sambar"    draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="rasam.webp"     id="img-rasam"     draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="upma.webp"      id="img-upma"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="vada.webp"      id="img-vada"      draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="aloo-paratha.webp" id="img-aloo-paratha" draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="chole-bhature.webp" id="img-chole-bhature" draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="biryani.webp"   id="img-biryani"   draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="idiyappam.webp" id="img-idiyappam" draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="pongal.webp"    id="img-pongal"    draggable="true" ondragstart="drag(event)"></div>
+      <div class="img-item"><img src="dhokla.webp"    id="img-dhokla"    draggable="true" ondragstart="drag(event)"></div>
+    </div>
+
+    <!-- RIGHT: labels / drop zones -->
+    <div class="labels">
+      <div id="label-dosa"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Dosa</div>
+      <div id="label-idli"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Idli</div>
+      <div id="label-poha"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Poha</div>
+      <div id="label-puri"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Puri</div>
+      <div id="label-chapati"       class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Chapati (Roti)</div>
+      <div id="label-sambar"        class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Sambar</div>
+      <div id="label-rasam"         class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Rasam</div>
+      <div id="label-upma"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Upma</div>
+      <div id="label-vada"          class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Vada</div>
+      <div id="label-aloo-paratha"  class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Aloo Paratha</div>
+      <div id="label-chole-bhature" class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Chole Bhature</div>
+      <div id="label-biryani"       class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Biryani</div>
+      <div id="label-idiyappam"     class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Idiyappam</div>
+      <div id="label-pongal"        class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Pongal</div>
+      <div id="label-dhokla"        class="drop-zone" ondragover="allowDrop(event)" ondrop="drop(event)">Dhokla</div>
+    </div>
+  </div>
+
+  <script>
+    // correct mapping for grading
+    const correctMap = {
+      "label-dosa":          "img-dosa",
+      "label-idli":          "img-idli",
+      "label-poha":          "img-poha",
+      "label-puri":          "img-puri",
+      "label-chapati":       "img-chapati",
+      "label-sambar":        "img-sambar",
+      "label-rasam":         "img-rasam",
+      "label-upma":          "img-upma",
+      "label-vada":          "img-vada",
+      "label-aloo-paratha":  "img-aloo-paratha",
+      "label-chole-bhature": "img-chole-bhature",
+      "label-biryani":       "img-biryani",
+      "label-idiyappam":     "img-idiyappam",
+      "label-pongal":        "img-pongal",
+      "label-dhokla":        "img-dhokla"
+    };
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text/plain", ev.target.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const imgId = ev.dataTransfer.getData("text/plain");
+      const label = ev.currentTarget;
+
+      // keep the label text and append the image
+      label.innerHTML = label.getAttribute("data-label") || label.textContent.trim();
+      label.setAttribute("data-label", label.textContent.trim());
+      const img = document.getElementById(imgId);
+      label.appendChild(document.createTextNode(" "));
+      label.appendChild(img);
+
+      if (correctMap[label.id] === imgId) {
+        label.classList.add("correct");
+        label.classList.remove("wrong");
+      } else {
+        label.classList.add("wrong");
+        label.classList.remove("correct");
+      }
+    }
+
+    function checkScore() {
+      let score = 0;
+      const total = Object.keys(correctMap).length;
+      for (const [labelId, imgId] of Object.entries(correctMap)) {
+        const label = document.getElementById(labelId);
+        const placedImg = label.querySelector("img");
+        if (placedImg && placedImg.id === imgId) score++;
+      }
+      document.getElementById("score").textContent =
+        `Score: ${score} / ${total}`;
+    }
+
+     function allowDrop(ev) {
+    ev.preventDefault();
+    handleAutoScroll(ev);   // add this line
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.id);
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+    // your existing drop logic…
+  }
+
+  // ---- Auto‑scroll logic ----
+  const SCROLL_ZONE = 80;      // px from top/bottom where scroll starts
+  const SCROLL_SPEED = 15;     // px per event; tweak to taste
+
+  function handleAutoScroll(ev) {
+    const y = ev.clientY;
+    const height = window.innerHeight;
+
+    if (y < SCROLL_ZONE) {
+      // near top → scroll up
+      window.scrollBy(0, -SCROLL_SPEED);
+    } else if (y > height - SCROLL_ZONE) {
+      // near bottom → scroll down
+      window.scrollBy(0, SCROLL_SPEED);
+    }
+  }
+
+  </script>
+</body>
+</html>
