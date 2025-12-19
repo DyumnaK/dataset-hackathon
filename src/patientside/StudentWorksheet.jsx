@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const SCROLL_ZONE = 80;
 const SCROLL_SPEED = 15;
 
-export default function Student() {
+export default function StudentWorksheet() {
   const [worksheet, setWorksheet] = useState(null);
   const [correctMap, setCorrectMap] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/worksheets/latest")
+    fetch("/api/worksheets/latest")
       .then(r => r.json())
       .then(ws => {
         if (!ws) return;
@@ -18,6 +18,9 @@ export default function Student() {
         });
         setWorksheet(ws);
         setCorrectMap(map);
+      })
+      .catch(() => {
+        // ignore fetch errors for now
       });
   }, []);
 
@@ -64,14 +67,14 @@ export default function Student() {
     alert(`Score: ${score} / ${total}`);
   };
 
-  if (!worksheet) return <div>No worksheet yet</div>;
+  if (!worksheet) return <div>Loading worksheet... (or no worksheet created yet)</div>;
 
   return (
-    <div>
+    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
       <h2>{worksheet.title}</h2>
       <button onClick={checkScore}>Check score</button>
 
-      <div style={{ display: "flex", gap: 40, marginTop: 16 }}>
+      <div style={{ display: "flex", gap: 40, marginTop: 12 }}>
         <div style={{ width: "50%" }}>
           {worksheet.items.map(it => (
             <div key={it.id} style={{ margin: 8 }}>
@@ -81,13 +84,13 @@ export default function Student() {
                 alt={it.label}
                 width={80}
                 height={80}
-                draggable="true"
+                draggable
                 onDragStart={drag}
-                style={{ border: "1px solid #ccc" }}
               />
             </div>
           ))}
         </div>
+
         <div style={{ width: "50%" }}>
           {worksheet.items.map(it => (
             <div
@@ -96,18 +99,20 @@ export default function Student() {
               data-label={it.label}
               onDragOver={allowDrop}
               onDrop={drop}
-              style={{
-                border: "2px dashed #aaa",
-                padding: 8,
-                margin: 8,
-                minHeight: 40
-              }}
+              className="drop-zone"
+              style={{ border: "2px dashed #aaa", padding: 8, margin: 8, minHeight: 40 }}
             >
               {it.label}
             </div>
           ))}
         </div>
       </div>
+
+      <p style={{ marginTop: 40 }}>
+        <a href="teacher.html">Back to Teacher page</a>
+        <br />
+        <a href="index.html">Back to AAC Demo</a>
+      </p>
     </div>
   );
 }

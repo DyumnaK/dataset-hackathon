@@ -50,17 +50,18 @@ export default function Home() {
 
           <div 
             className="aac-tile"
+            onClick={() => navigate('/digital')}
             style={{
               background: "linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05))",
               borderLeft: "4px solid #22c55e",
-              cursor: "not-allowed",
-              opacity: 0.6
+              cursor: "pointer",
+              opacity: 1
             }}
           >
             <div style={{ fontSize: "40px", marginBottom: "12px" }}>🎨</div>
             <h3>Digital Activities</h3>
             <p style={{ fontSize: "12px", color: "#6b7280", marginTop: "8px" }}>
-              Coming soon...
+              Interactive worksheets & activities
             </p>
           </div>
         </div>

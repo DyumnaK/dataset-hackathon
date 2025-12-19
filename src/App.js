@@ -8,6 +8,14 @@ import Home from "./Home";
 import AACBoardBuilder from "./aac/AACBoardBuilder";
 import ScheduleHome from "./schedule/ScheduleHome";
 import ScheduleEditor from "./schedule/ScheduleEditor";
+import {
+  AACDemo,
+  TeacherWorksheet,
+  StudentWorksheet,
+  FestivalsWorksheet,
+  FoodWorksheet,
+} from "./patientside";
+import DigitalActivities from "./digital/DigitalActivities";
 
 import "./styles/aac.css";
 import "./styles/aacTheme.css";
@@ -29,6 +37,13 @@ export default function App() {
         {/* Modules */}
         <Route path="/app" element={<Home />} />
         <Route path="/aac" element={<AACBoardBuilder />} />
+        {/* Legacy patientside demo/components converted to React under src/patientside */}
+        <Route path="/patientside/aac" element={<AACDemo />} />
+        <Route path="/patientside/teacher" element={<TeacherWorksheet />} />
+        <Route path="/patientside/student" element={<StudentWorksheet />} />
+        <Route path="/patientside/festivals" element={<FestivalsWorksheet />} />
+        <Route path="/patientside/food" element={<FoodWorksheet />} />
+        <Route path="/digital" element={<DigitalActivities />} />
         <Route path="/schedule" element={<ScheduleHome />} />
         <Route path="/schedule/:id" element={<ScheduleEditor />} />
       </Routes>

@@ -88,12 +88,21 @@ export default function PatientDetail() {
             </div>
 
             {/* Digital Activities */}
-            <div className="module-card activity-card disabled">
+            <div
+              className="module-card activity-card"
+              onClick={() => navigate('/digital')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/digital'); }}
+            >
               <div className="module-icon">🎨</div>
               <h3>Digital Activities</h3>
-              <p>Create interactive learning activities and games (Coming Soon)</p>
-              <button className="module-btn" disabled>
-                Coming Soon
+              <p>Open interactive learning activities and games</p>
+              <button
+                className="module-btn"
+                onClick={(e) => { e.stopPropagation(); navigate('/digital'); }}
+              >
+                Open Digital Activities
               </button>
             </div>
           </div>
