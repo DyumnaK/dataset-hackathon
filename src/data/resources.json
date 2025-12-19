@@ -1,0 +1,30 @@
+[
+  {
+    "id": "img_mom",
+    "label": "mom",
+    "type": "image",
+    "tags": ["mom", "family"],
+    "url": "/assets/images/mom.png"
+  },
+  {
+    "id": "img_dad",
+    "label": "dad",
+    "type": "image",
+    "tags": ["dad", "family"],
+    "url": "/assets/images/dad.png"
+  },
+  {
+    "id": "img_idli",
+    "label": "idli",
+    "type": "image",
+    "tags": ["food", "breakfast"],
+    "url": "/assets/images/idli.png"
+  },
+  {
+    "id": "aud_mom",
+    "label": "mom audio",
+    "type": "audio",
+    "tags": ["mom"],
+    "url": "/assets/audio/mom.mp3"
+  }
+]
