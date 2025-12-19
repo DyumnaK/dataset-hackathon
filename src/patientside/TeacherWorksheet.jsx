@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/worksheets.css";
 
 export default function TeacherWorksheet() {
   const [title, setTitle] = useState("");
@@ -55,30 +56,30 @@ export default function TeacherWorksheet() {
   };
 
   return (
-    <div style={{ padding: 20, fontFamily: "sans-serif", background: "#f9f9f9" }}>
+    <div className="worksheets-root" style={{ background: "#f9f9f9" }}>
       <h2>Create Matching Worksheet</h2>
       <input
+        className="form-input"
         placeholder="Worksheet title (e.g., Indian Festivals)"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        style={{ width: "100%", fontSize: "1.2em" }}
       />
       <div style={{ marginTop: 20 }}>
         {rows.map((row, i) => (
-          <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
+          <div key={i} className="form-row">
             <input
+              className="form-input"
               placeholder="Label (e.g., Diwali)"
               value={row.label}
               onChange={e => handleLabelChange(i, e.target.value)}
-              style={{ flex: 1 }}
             />
             <input type="file" accept="image/*" onChange={e => handleFileChange(i, e.target.files[0])} />
-            {row.preview && <img src={row.preview} style={{ width: 80, height: 80, objectFit: "cover", border: "1px solid #ccc" }} alt="preview" />}
+            {row.preview && <img src={row.preview} className="preview-img" alt="preview" />}
           </div>
         ))}
       </div>
-      <button onClick={addRow}>Add another item</button>
-      <button onClick={saveWorksheet} style={{ marginLeft: 10, background: "#4CAF50", color: "white" }}>
+      <button className="btn" onClick={addRow}>Add another item</button>
+      <button className="btn" onClick={saveWorksheet} style={{ marginLeft: 10 }}>
         Save Worksheet
       </button>
       <p style={{ marginTop: 20 }}>

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "../styles/worksheets.css";
+import "../styles/aacTheme.css";
 
 const SCROLL_ZONE = 80;
 const SCROLL_SPEED = 15;
@@ -34,6 +36,13 @@ export default function StudentWorksheet() {
 
   const drag = ev => {
     ev.dataTransfer.setData("text/plain", ev.target.id);
+    const docHandler = e => {
+      const y = e.clientY;
+      if (y < SCROLL_ZONE) window.scrollBy(0, -SCROLL_SPEED);
+      else if (y > window.innerHeight - SCROLL_ZONE) window.scrollBy(0, SCROLL_SPEED);
+    };
+    document._studentDragHandler = docHandler;
+    document.addEventListener('dragover', docHandler);
   };
 
   const drop = ev => {
@@ -67,42 +76,59 @@ export default function StudentWorksheet() {
     alert(`Score: ${score} / ${total}`);
   };
 
+  const onDragEndCleanup = () => {
+    if (document._studentDragHandler) {
+      document.removeEventListener('dragover', document._studentDragHandler);
+      delete document._studentDragHandler;
+    }
+  };
+
   if (!worksheet) return <div>Loading worksheet... (or no worksheet created yet)</div>;
 
   return (
-    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
-      <h2>{worksheet.title}</h2>
-      <button onClick={checkScore}>Check score</button>
+    <div className="aac-bg">
+      <div className="flower-container">
+        <div className="flower flower-left" />
+        <div className="flower flower-right" />
+      </div>
 
-      <div style={{ display: "flex", gap: 40, marginTop: 12 }}>
-        <div style={{ width: "50%" }}>
-          {worksheet.items.map(it => (
-            <div key={it.id} style={{ margin: 8 }}>
-              <img
-                src={it.imageUrl}
-                id={`img-${it.id}`}
-                alt={it.label}
-                width={80}
-                height={80}
-                draggable
-                onDragStart={drag}
-              />
-            </div>
-          ))}
-        </div>
+      <div className="aac-content">
+        <div className="page-grid">
+          <div className="worksheets-root">
+      <div className="worksheet-header">
+        <h2>{worksheet.title}</h2>
+      </div>
 
-        <div style={{ width: "50%" }}>
+      <div className="actions">
+        <button className="btn" onClick={checkScore}>Check score</button>
+      </div>
+
+      <div className="container">
+        <div className="images labels">
           {worksheet.items.map(it => (
-            <div
-              key={it.id}
-              id={`label-${it.id}`}
-              data-label={it.label}
-              onDragOver={allowDrop}
-              onDrop={drop}
-              className="drop-zone"
-              style={{ border: "2px dashed #aaa", padding: 8, margin: 8, minHeight: 40 }}
-            >
-              {it.label}
+            <div key={it.id} style={{ display: 'flex', gap: 12, alignItems: 'center', margin: '8px 0' }}>
+              <div className="img-item" style={{ margin: 0 }}>
+                <img
+                  src={it.imageUrl}
+                  id={`img-${it.id}`}
+                  alt={it.label}
+                  width={80}
+                  height={80}
+                  draggable
+                  onDragStart={drag}
+                  onDragEnd={onDragEndCleanup}
+                />
+              </div>
+              <div
+                id={`label-${it.id}`}
+                data-label={it.label}
+                onDragOver={allowDrop}
+                onDrop={drop}
+                className="drop-zone"
+                style={{ flex: 1 }}
+              >
+                {it.label}
+              </div>
             </div>
           ))}
         </div>
@@ -113,6 +139,25 @@ export default function StudentWorksheet() {
         <br />
         <a href="index.html">Back to AAC Demo</a>
       </p>
+    </div>
+
+          <aside className="side-panel">
+            <div className="hero-card">
+              <h3>Play tips</h3>
+              <ul className="tips">
+                <li>Drag each image carefully to its matching name.</li>
+                <li>Auto-scrolling helps when items overflow the viewport.</li>
+                <li>Use Reset to try again.</li>
+              </ul>
+            </div>
+
+            <div className="hero-card">
+              <h3>Actions</h3>
+              <button className="btn secondary" onClick={() => window.location.reload()}>Reset worksheet</button>
+            </div>
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
