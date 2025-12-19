@@ -234,6 +234,8 @@ we lay the foundation for a **scalable, inclusive, and locally relevant assistiv
 ## ACKNOWLEDGEMENTS 
 A huge thank you to my teammates - Sachin, Ayesha and Saffanah without which the project would not have taken this form in such a short time frame.
 
+PPT LINK - https://docs.google.com/presentation/d/1oqaDy_zzLrSoGsJC7QeKPbubP4RAO9qckKIA8sfpstE/edit?usp=sharing
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### FUTURE INNOVATION
